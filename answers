@@ -1,0 +1,304 @@
+PRACTICE JOINS
+
+-- SELECT *
+-- FROM invoice
+-- JOIN invoice_line ON invoice_line.invoice_id = invoice.invoice_id
+-- WHERE invoice_line.unit_price > 0.99;
+
+-- SELECT *
+-- FROM invoice i
+-- JOIN invoice_line il ON il.invoice_id = i.invoice_id
+-- WHERE il.unit_price > 0.99;
+
+-----------------------------------------------------------------------------
+
+-- SELECT invoice.invoice_date, customer.first_name, customer.last_name, invoice.total
+-- FROM invoice
+-- JOIN customer ON invoice.customer_id = customer.customer_id;
+
+-- SELECT i.invoice_date, c.first_name, c.last_name, i.total
+-- FROM invoice i
+-- JOIN customer c ON i.customer_id = c.customer_id;
+------------------------------------------------------------------------------
+ABOVE IS TWICE FOR TESTING PURPOSES
+
+
+
+-- SELECT cust.first_name, cust.last_name, emp.first_name, emp.last_name
+-- FROM customer cust
+-- JOIN employee emp ON cust.support_rep_id = emp.employee_id;
+
+-- SELECT alb.title, art.name
+-- FROM album alb
+-- JOIN artist art ON alb.artist_id = art.artist_id;
+
+-- SELECT pt.track_id
+-- FROM playlist_track pt
+-- JOIN playlist p ON p.playlist_id = pt.playlist_id
+-- WHERE p.name = 'Music';
+
+-- SELECT t.name
+-- FROM track t
+-- JOIN playlist_track pt ON pt.track_id = t.track_id
+-- WHERE pt.playlist_id = 5;
+
+-- SELECT t.name, p.name
+-- FROM track t
+-- JOIN playlist_track pt ON t.track_id = pt.track_id 
+-- JOIN playlist p ON pt.playlist_id = p.playlist_id;
+
+-- SELECT t.name, alb.title
+-- FROM track t
+-- JOIN album alb ON t.album_id = alb.album_id
+-- JOIN genre g ON g.genre_id = t.genre_id
+-- WHERE g.name LIKE 'Alternative & Punk';
+
+---------------------------------------------------------------------------------
+
+PRACTICE NESTED QUERIES
+
+-- SELECT *
+-- FROM invoice
+-- WHERE invoice_id IN (
+--   SELECT invoice_id FROM invoice_line
+--   WHERE unit_price > 0.99 );
+
+-- SELECT *
+-- FROM playlist_track
+-- WHERE playlist_id IN ( 
+--   SELECT playlist_id FROM playlist
+--   WHERE name ILIKE 'Music' );
+
+-- SELECT name
+-- FROM track
+-- WHERE track_id IN (
+--  	SELECT track_id FROM playlist_track
+--   WHERE playlist_id = 5 );
+
+-- SELECT *
+-- FROM track
+-- WHERE genre_id IN (
+--   SELECT genre_id FROM genre
+--   WHERE name ILIKE 'Comedy' );
+
+-- SELECT *
+-- FROM track
+-- WHERE album_id IN (
+--   SELECT album_id FROM album
+--   WHERE title ILIKE 'Fireball' );
+
+-- SELECT *
+-- FROM track
+-- WHERE album_id IN (
+--   SELECT album_id FROM album
+--   WHERE artist_id IN (
+--     SELECT artist_id FROM artist
+--     WHERE name LIKE 'Queen'
+--     )
+--   );
+
+-------------------------------------------------------------------------
+
+PRACTICE UPDATING ROWS
+
+-- UPDATE customer
+-- SET fax = null
+-- WHERE fax IS NOT null;
+
+-- UPDATE customer
+-- SET company = 'Self'
+-- WHERE company IS null;
+
+-- UPDATE customer
+-- SET last_name = 'Thompson'
+-- WHERE first_name ILIKE 'Julia' AND last_name ILIKE 'Barnett';
+
+-- SELECT * FROM customer
+
+-- UPDATE customer
+-- SET support_rep_id = 4
+-- WHERE email ILIKE 'luisrojas@yahoo.cl';
+
+-- SELECT * FROM customer;
+
+-- UPDATE track
+-- SET composer = 'The darkness around us'
+-- WHERE genre_id = ( 
+--   SELECT genre_id FROM genre WHERE name = 'Metal' )
+--   AND composer IS null;
+
+---------------------------------------------------------------------------
+
+GROUP BY
+
+-- SELECT COUNT(*), g.name
+-- FROM track t
+-- JOIN genre g ON t.genre_id = g.genre_id
+-- GROUP BY g.name;
+
+
+SELECT COUNT(*), g.name
+FROM track t
+JOIN genre g ON g.genre_id = t.genre_id
+WHERE g.name ILIKE 'Pop' OR g.name ILIKE 'Rock'
+GROUP BY g.name;
+
+SELECT ar.name, COUNT(*)
+FROM album al
+JOIN artist ar ON ar.artist_id = al.artist_id
+GROUP BY ar.name;
+
+---------------------------------------------------------------------------- 
+
+USE DISTINCT
+
+-- SELECT DISTINCT composer
+-- FROM track;
+
+-- SELECT DISTINCT billing_postal_code
+-- FROM invoice;
+
+-- SELECT DISTINCT company
+-- FROM customer;
+
+-----------------------------------------------------------------------------
+
+DELETE ROWS
+
+-- CREATE TABLE practice_delete ( name TEXT, type TEXT, value INTEGER );
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'bronze', 50);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'bronze', 50);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'bronze', 50);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'silver', 100);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'silver', 100);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'gold', 150);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'gold', 150);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'gold', 150);
+-- INSERT INTO practice_delete ( name, type, value ) VALUES ('delete', 'gold', 150);
+
+-- SELECT * FROM practice_delete;
+
+-- DELETE FROM practice_delete
+-- WHERE type ILIKE 'bronze';
+
+-- SELECT * FROM practice_delete;
+
+-- DELETE FROM practice_delete
+-- WHERE type ILIKE 'silver';
+
+-- SELECT * FROM practice_delete;
+
+-- DELETE FROM practice_delete
+-- WHERE value = 150;
+
+--------------------------------------------------------------------------------
+
+eCommerce Simulation
+
+HERE WE GO BOIZ THE HARD PART 
+
+
+Summary
+Let's simulate an e-commerce site. We're going to need users, products, and orders.
+
+users need a name and an email.
+
+products need a name and a price
+
+orders need a ref to product.
+
+All 3 need primary keys.
+
+Instructions
+Create 3 tables following the criteria in the summary.
+
+Add some data to fill up each table.
+
+At least 3 users, 3 products, 3 orders.
+
+Run queries against your data.
+
+Get all products for the first order.
+
+Get all orders.
+
+Get the total cost of an order ( sum the price of all products on an order ).
+
+Add a foreign key reference from orders to users.
+
+Update the orders table to link a user to each order.
+
+Run queries against your data.
+
+Get all orders for a user.
+
+Get how many orders each user has.
+
+-----------------------------------------------------------------------------
+
+-- CREATE TABLE users (
+--   user_id SERIAL PRIMARY KEY,
+--   name VARCHAR(100),
+--   email VARCHAR(200)
+--   );
+  
+-- CREATE TABLE products (
+--    product_id SERIAL PRIMARY KEY,
+--    name VARCHAR(100),
+--    price NUMERIC
+--    );
+    
+-- CREATE TABLE orders (
+--   order_id SERIAL PRIMARY KEY,
+--   product_id INTEGER REFERENCES products(product_id)
+--   );
+
+
+--   INSERT INTO users (name, email)
+--     VALUES
+--     ('Justin', 'Justinjgh@gmail.com'),
+--     ('Bill', 'Bill@gmail.com'),
+--     ('Rick', 'Rick@gmail.com');
+  
+--   INSERT INTO products (name, price)
+--     VALUES
+--     ('Chair', 22),
+--     ('Turkey', 10),
+--     ('Lizard', 10000);
+
+-- 		  INSERT INTO orders (product_id)
+--     	VALUES
+--       (1),
+--       (2),
+--       (3);
+
+
+-- SELECT name, order_id FROM orders
+-- JOIN products ON orders.product_id = products.product_id
+-- WHERE order_id = 1;
+
+-- SELECT * FROM orders;
+
+-- SELECT SUM(price), order_id
+-- FROM products
+-- JOIN orders ON orders.product_id = products.product_id
+-- GROUP BY order_id;
+
+-- ALTER TABLE orders ADD COLUMN 
+-- user_id INTEGER REFERENCES users(user_id);
+
+-- SELECT * from orders;
+
+-- UPDATE orders
+-- SET user_id = order_id;
+
+-- SELECT * FROM orders
+
+-- SELECT * FROM orders
+-- WHERE user_id = 1;
+
+-- SELECT users.name, COUNT(*)
+-- FROM orders JOIN users ON users.user_id = orders.user_id
+-- GROUP BY users.name;
+
+
